@@ -6,3 +6,7 @@
 <p align="center">
 	<a href="https://github.com/voishion/FoodPicker"><img src="https://img.shields.io/badge/FoodPicker-v0.0.1-brightgreen.svg"></a>
 </p>
+
+## 项目简介
+
+跟着[ChaoCode](https://www.youtube.com/watch?v=wKx2C-dsnro&list=PLXM8k1EWy5khONZ9M9ytK8mMrcEOXvGsE)老师一起开发...
