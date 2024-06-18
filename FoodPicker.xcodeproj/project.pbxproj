@@ -7,18 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7605EA3F2C1FD98000BB1AA4 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7605EA3E2C1FD97F00BB1AA4 /* Food.swift */; };
 		76AEF5492C1F6A07008F6F0C /* FoodPickerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AEF5482C1F6A07008F6F0C /* FoodPickerApp.swift */; };
 		76AEF54B2C1F6A07008F6F0C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76AEF54A2C1F6A07008F6F0C /* ContentView.swift */; };
 		76AEF54D2C1F6A0A008F6F0C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76AEF54C2C1F6A0A008F6F0C /* Assets.xcassets */; };
 		76AEF5502C1F6A0A008F6F0C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 76AEF54F2C1F6A0A008F6F0C /* Preview Assets.xcassets */; };
+		76C355DA2C200B8E009FC8C2 /* PreviewDevice+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76C355D92C200B8E009FC8C2 /* PreviewDevice+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7605EA3E2C1FD97F00BB1AA4 /* Food.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Food.swift; sourceTree = "<group>"; };
 		76AEF5452C1F6A07008F6F0C /* FoodPicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodPicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		76AEF5482C1F6A07008F6F0C /* FoodPickerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodPickerApp.swift; sourceTree = "<group>"; };
 		76AEF54A2C1F6A07008F6F0C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		76AEF54C2C1F6A0A008F6F0C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		76AEF54F2C1F6A0A008F6F0C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		76C355D92C200B8E009FC8C2 /* PreviewDevice+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PreviewDevice+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +59,8 @@
 				76AEF54A2C1F6A07008F6F0C /* ContentView.swift */,
 				76AEF54C2C1F6A0A008F6F0C /* Assets.xcassets */,
 				76AEF54E2C1F6A0A008F6F0C /* Preview Content */,
+				7605EA3E2C1FD97F00BB1AA4 /* Food.swift */,
+				76C355D92C200B8E009FC8C2 /* PreviewDevice+.swift */,
 			);
 			path = FoodPicker;
 			sourceTree = "<group>";
@@ -137,8 +143,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				76C355DA2C200B8E009FC8C2 /* PreviewDevice+.swift in Sources */,
 				76AEF54B2C1F6A07008F6F0C /* ContentView.swift in Sources */,
 				76AEF5492C1F6A07008F6F0C /* FoodPickerApp.swift in Sources */,
+				7605EA3F2C1FD98000BB1AA4 /* Food.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
