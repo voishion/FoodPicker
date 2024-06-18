@@ -11,6 +11,7 @@ struct ContentView: View {
     let food = Food.examples
     
     @State private var selectedFood: Food?
+    @State private var showInfo: Bool = false
     
     var body: some View {
         ScrollView {
@@ -46,74 +47,84 @@ struct ContentView: View {
                                     .animation(.easeInOut(duration: 0.5).delay(0.2)),
                                 removal: .opacity
                                     .animation(.easeInOut(duration: 0.4))))
-                        Image(systemName: "info.circle.fill")
-                            .foregroundColor(.secondary)
+                        Button {
+                            showInfo.toggle()
+                        } label: {
+                            Image(systemName: "info.circle.fill")
+                                .foregroundColor(.secondary)
+                        }.buttonStyle(.plain)
                     }
+                    
+                    Text("热量 \(selectedFood!.calorie.formatted()) 大卡")
+                        .font(.title2)
+                    
+                    VStack {
+                        if showInfo {
+                            // HStack排版
+                            /*
+                            HStack {
+                                VStack (spacing: 12) {
+                                    Text("蛋白质")
+                                    Text(selectedFood!.protein.formatted() + "g")
+                                }
+                                
+                                Divider().frame(width: 1).padding(.horizontal)
+                                
+                                VStack (spacing: 12) {
+                                    Text("脂肪")
+                                    Text(selectedFood!.fat.formatted() + "g")
+                                }
+                                
+                                Divider().frame(width: 1).padding(.horizontal)
+                                
+                                VStack (spacing: 12) {
+                                    Text("碳水")
+                                    Text(selectedFood!.carb.formatted() + "g")
+                                }
+                            }
+                            .font(.title3)
+                            .padding(.horizontal)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .foregroundColor(Color(.systemBackground))
+                            )
+                            */
+                            
+                            // Grid排版
+                            Grid (horizontalSpacing: 16, verticalSpacing: 12) {
+                                GridRow {
+                                    Text("蛋白质")
+                                    Text("脂肪")
+                                    Text("碳水")
+                                }.frame(minWidth: 70)
+                                
+                                // 水平分割线
+                                Divider()
+                                    .gridCellUnsizedAxes(.horizontal)
+                                    .padding(.horizontal, -10)
+                                
+                                GridRow {
+                                    Text(selectedFood!.protein.formatted() + "g")
+                                    Text(selectedFood!.fat.formatted() + "g")
+                                    Text(selectedFood!.carb.formatted() + "g")
+                                }
+                            }
+                            .font(.title3)
+                            .padding(.horizontal)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .foregroundColor(Color(.systemBackground))
+                            )
+                            .transition(.move(edge: .top).combined(with: .opacity))
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .clipped()
                 }
                 
-                Text("热量 \(selectedFood!.calorie.formatted()) 大卡")
-                    .font(.title2)
-                
-                // HStack排版
-                /*
-                HStack {
-                    VStack (spacing: 12) {
-                        Text("蛋白质")
-                        Text(selectedFood!.protein.formatted() + "g")
-                    }
-                    
-                    Divider().frame(width: 1).padding(.horizontal)
-                    
-                    VStack (spacing: 12) {
-                        Text("脂肪")
-                        Text(selectedFood!.fat.formatted() + "g")
-                    }
-                    
-                    Divider().frame(width: 1).padding(.horizontal)
-                    
-                    VStack (spacing: 12) {
-                        Text("碳水")
-                        Text(selectedFood!.carb.formatted() + "g")
-                    }
-                }
-                .font(.title3)
-                .padding(.horizontal)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundColor(Color(.systemBackground))
-                )
-                */
-                
-                // Grid排版
-                Grid (horizontalSpacing: 16, verticalSpacing: 12) {
-                    GridRow {
-                        Text("蛋白质")
-                        Text("脂肪")
-                        Text("碳水")
-                    }.frame(minWidth: 70)
-                    
-                    // 水平分割线
-                    Divider()
-                        .gridCellUnsizedAxes(.horizontal)
-                        .padding(.horizontal, -10)
-                    
-                    GridRow {
-                        Text(selectedFood!.protein.formatted() + "g")
-                        Text(selectedFood!.fat.formatted() + "g")
-                        Text(selectedFood!.carb.formatted() + "g")
-                    }
-                }
-                .font(.title3)
-                .padding(.horizontal)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundColor(Color(.systemBackground))
-                )
-                
-                
-                Spacer().layoutPriority(1) 
+                Spacer().layoutPriority(1)
                 
                 Button(role: .none) {
                     selectedFood = food.shuffled().first {$0 != selectedFood}
@@ -125,6 +136,7 @@ struct ContentView: View {
                 
                 Button(role: .none) {
                     selectedFood = .none
+                    showInfo = false
                 } label: {
                     Text("重置").frame(width: 200)
                 }.buttonStyle(.bordered)
@@ -136,6 +148,7 @@ struct ContentView: View {
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.capsule)
             .controlSize(.large)
+            .animation(.spring(dampingFraction: 0.55), value: showInfo)
             // 选择食物发生变化时，产生动画
             .animation(.easeInOut(duration: 0.6), value: selectedFood)
         }.background(Color(.secondarySystemBackground))
@@ -151,7 +164,7 @@ extension ContentView {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(selectedFood: .examples.first!)
-//        ContentView(selectedFood: .examples.first!)
-//        ContentView(selectedFood: .examples.first!).previewDevice(.iPhoneSE)
+        //        ContentView(selectedFood: .examples.first!)
+        //        ContentView(selectedFood: .examples.first!).previewDevice(.iPhoneSE)
     }
 }
