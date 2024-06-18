@@ -54,6 +54,8 @@ struct ContentView: View {
                 Text("热量 \(selectedFood!.calorie.formatted()) 大卡")
                     .font(.title2)
                 
+                // HStack排版
+                /*
                 HStack {
                     VStack (spacing: 12) {
                         Text("蛋白质")
@@ -81,8 +83,37 @@ struct ContentView: View {
                     RoundedRectangle(cornerRadius: 8)
                         .foregroundColor(Color(.systemBackground))
                 )
+                */
                 
-                Spacer().layoutPriority(1) // 排版优先级
+                // Grid排版
+                Grid (horizontalSpacing: 16, verticalSpacing: 12) {
+                    GridRow {
+                        Text("蛋白质")
+                        Text("脂肪")
+                        Text("碳水")
+                    }.frame(minWidth: 70)
+                    
+                    // 水平分割线
+                    Divider()
+                        .gridCellUnsizedAxes(.horizontal)
+                        .padding(.horizontal, -10)
+                    
+                    GridRow {
+                        Text(selectedFood!.protein.formatted() + "g")
+                        Text(selectedFood!.fat.formatted() + "g")
+                        Text(selectedFood!.carb.formatted() + "g")
+                    }
+                }
+                .font(.title3)
+                .padding(.horizontal)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .foregroundColor(Color(.systemBackground))
+                )
+                
+                
+                Spacer().layoutPriority(1) 
                 
                 Button(role: .none) {
                     selectedFood = food.shuffled().first {$0 != selectedFood}
