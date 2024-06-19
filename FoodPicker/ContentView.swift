@@ -45,8 +45,8 @@ struct ContentView: View {
 private extension ContentView {
     var foodImage: some View {
         Group {
-            if selectedFood != .none {
-                Text(selectedFood!.image)
+            if let selectedFood {
+                Text(selectedFood.image)
                     .font(.system(size: 200))
                     .minimumScaleFactor(0.7)
                     .lineLimit(1)
@@ -144,10 +144,10 @@ private extension ContentView {
     }
     
     @ViewBuilder var selectedFoodInfoView: some View {
-        if selectedFood != .none {
+        if let selectedFood {
             foodNameView
             
-            Text("热量 \(selectedFood!.$calorie)")
+            Text("热量 \(selectedFood.$calorie)")
                 .font(.title2)
             
             foodDetailView
