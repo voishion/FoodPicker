@@ -24,9 +24,9 @@ extension View {
     /// - Returns: 某种视图
     func roundedRectBackground(
         radius: CGFloat = 8,
-        fill: some ShapeStyle = Color.bg
+        fill: some ShapeStyle = .bg
     ) -> some View {
-        background(RoundedRectangle(cornerRadius: radius).foregroundStyle(fill))
+        background(RoundedRectangle(cornerRadius: radius).fill(fill))
     }
 }
 
@@ -35,9 +35,9 @@ extension Animation {
     static let fpEaseInOut = Animation.easeInOut(duration: 0.6)
 }
 
-extension Color {
-    static let bg = Color(.systemBackground)
-    static let bg2 = Color(.secondarySystemBackground)
+extension ShapeStyle where Self == Color {
+    static var bg: Color { Color(.systemBackground) }
+    static var bg2: Color { Color(.secondarySystemBackground) }
 }
 
 extension AnyTransition {

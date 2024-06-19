@@ -15,7 +15,7 @@ struct ContentView: View {
     let food = Food.examples
     
     var body: some View {
-        ScrollView (showsIndicators:false) {
+        ScrollView (showsIndicators: false) {
             VStack (spacing: 30) {
                 foodImage
                 
@@ -37,7 +37,7 @@ struct ContentView: View {
             .animation(.fpSpring, value: shouldShowInfo)
             // 选择食物发生变化时，产生动画
             .animation(.fpSpring, value: selectedFood)
-        }.background(Color.bg2)
+        }.background(.bg2)
     }
 }
 
@@ -187,3 +187,7 @@ struct ContentView_Previews: PreviewProvider {
         //        ContentView(selectedFood: .examples.first!).previewDevice(.iPhoneSE)
     }
 }
+
+//#Preview {
+//    ContentView(selectedFood: .examples.first!)
+//}
