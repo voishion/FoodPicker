@@ -10,10 +10,10 @@ import SwiftUI
 extension View {
     /// 主按钮风格
     /// - Returns: View
-    func mainButtonStyle() -> some View {
+    func mainButtonStyle(shape: ButtonBorderShape = .capsule) -> some View {
         buttonStyle(.borderedProminent)
         // self.buttonStyle(.borderedProminent)，不建议self.这种写法
-        .buttonBorderShape(.capsule)
+        .buttonBorderShape(shape)
         .controlSize(.large)
     }
     
@@ -38,6 +38,7 @@ extension Animation {
 extension ShapeStyle where Self == Color {
     static var bg: Color { Color(.systemBackground) }
     static var bg2: Color { Color(.secondarySystemBackground) }
+    static var groupBg: Color { Color(.systemGroupedBackground) }
 }
 
 extension AnyTransition {
@@ -50,4 +51,18 @@ extension AnyTransition {
             .animation(.easeInOut(duration: 0.5).delay(0.2)),
         removal: .opacity
             .animation(.easeInOut(duration: 0.4)))
+}
+
+extension AnyLayout {
+    /// 根据条件判断返回水平或垂直的Layout
+    /// - Parameters:
+    ///   - condition: 条件
+    ///   - spacing: 间距
+    ///   - content: 内容
+    /// - Returns: Layout
+    static func useVStack(if condition: Bool, spacing: CGFloat, @ViewBuilder content: @escaping () -> some View) -> some View {
+        let layout = condition ? AnyLayout(VStackLayout(spacing: spacing)) : AnyLayout(HStackLayout(spacing: spacing))
+        
+        return layout(content)
+    }
 }
