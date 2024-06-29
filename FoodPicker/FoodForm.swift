@@ -7,8 +7,18 @@
 
 import SwiftUI
 
-private enum MyField {
+private enum MyField: Int {
     case title, image, calorie, protein, fat, carb
+}
+
+private extension TextField where Label == Text {
+    func focused(_ field: FocusState<MyField?>.Binding, equals this: MyField) -> some View {
+        submitLabel(this == .carb ? .done : .next)
+        .focused(field, equals: this)
+        .onSubmit {
+            field.wrappedValue = .init(rawValue: this.rawValue + 1)
+        }
+    }
 }
 
 extension FoodListView {
@@ -17,6 +27,7 @@ extension FoodListView {
         
         @FocusState private var field: MyField?
         @State var food: Food
+        var onSubmit: (Food) -> Void
         
         private var isNotValid: Bool {
             food.name.isEmpty
@@ -55,40 +66,32 @@ extension FoodListView {
                     Form {
                         LabeledContent("名称") {
                             TextField("必填", text: $food.name)
-                                .submitLabel(.next)
                                 .focused($field, equals: .title)
-                                .onSubmit {
-                                    field = .image
-                                }
                         }
                         
                         LabeledContent("图片") {
                             TextField("必填，最多输入2个字符", text: $food.image)
-                                .submitLabel(.next)
                                 .focused($field, equals: .image)
-                                .onSubmit {
-                                    field = .calorie
-                                }
                         }
                         
-                        buildNumberField(title: "热量", value: $food.calorie, suffix: "大卡")
-                            .submitLabel(.next)
-                            .focused($field, equals: .calorie)
-                            .onSubmit {
-                                field = .protein
-                            }
-                        
-                        buildNumberField(title: "蛋白质", value: $food.protein)
-                        
-                        buildNumberField(title: "脂肪", value: $food.fat)
-                        
-                        buildNumberField(title: "碳水", value: $food.carb)
+                        buildNumberField(title: "热量", value: $food.calorie, 
+                                         field: .calorie, suffix: "大卡")
+
+                        buildNumberField(title: "蛋白质", value: $food.protein, 
+                                         field: .protein)
+
+                        buildNumberField(title: "脂肪", value: $food.fat, 
+                                         field: .fat)
+
+                        buildNumberField(title: "碳水", value: $food.carb, 
+                                         field: .carb)
                     }.padding(.top, -16)
                     
                     Button {
-                        
+                        dismiss()
+                        onSubmit(food)
                     } label: {
-                        Text(invalidMessage ?? "保存").frame(maxWidth: .infinity)
+                        Text(invalidMessage ?? "保存").bold().frame(maxWidth: .infinity)
                     }
                     .mainButtonStyle()
                     .padding()
@@ -100,19 +103,34 @@ extension FoodListView {
                 .scrollDismissesKeyboard(.interactively)
                 .toolbar {
                     ToolbarItemGroup(placement: .keyboard) {
-                        Text("<")
-                        Text(">")
+                        Spacer()
+                        Button(action: goPreviousField) {
+                            Image(systemName: "chevron.up")
+                        }
+                        Button(action: goNextField) {
+                            Image(systemName: "chevron.down")
+                        }
                     }
                 }
             }
         }
         
-        private func buildNumberField(title: String, value: Binding<Double>, suffix: String = "g") -> some View {
+        private func goPreviousField() {
+            guard let rawValue = field?.rawValue else { return }
+            field = .init(rawValue: rawValue - 1)
+        }
+        
+        private func goNextField() {
+            guard let rawValue = field?.rawValue else { return }
+            field = .init(rawValue: rawValue + 1)
+        }
+
+        private func buildNumberField(title: String, value: Binding<Double>, field: MyField, suffix: String = "g") -> some View {
             LabeledContent(title) {
                 HStack {
-                    TextField("必填", value: value, format:
-                            .number.precision(.fractionLength(1))
-                    ).keyboardType(.decimalPad)
+                    TextField("必填", value: value, format: .number.precision(.fractionLength(1)))
+                        .focused($field, equals: field)
+                        .keyboardType(.decimalPad)
                     Text(suffix)
                 }
             }
@@ -121,5 +139,5 @@ extension FoodListView {
 }
 
 #Preview {
-    FoodListView.FoodForm(food: Food.examples.first!)
+    FoodListView.FoodForm(food: Food.examples.first!) { _ in}
 }

@@ -13,7 +13,9 @@ struct FoodListView: View {
     @Environment(\.dynamicTypeSize) var textSize
 
     @State private var food = Food.examples
-    @State private var selectedFood = Set<Food.ID>()
+    @State private var selectedFoodId = Set<Food.ID>()
+    
+    @State private var selectedFood: Binding<Food>?
     
     @State private var shouldShowSheet = false
     @State private var foodDetaiHeight: CGFloat = FoodDetailSheetHeightKey.defaultValue
@@ -26,7 +28,7 @@ struct FoodListView: View {
         VStack (alignment: .leading) {
             titleBar
 
-            List($food, editActions: .all, selection: $selectedFood) { $food in
+            List($food, editActions: .all, selection: $selectedFoodId) { $food in
                 HStack {
                     Text(food.name)
                         .padding(.vertical, 8)
@@ -40,6 +42,9 @@ struct FoodListView: View {
                         Image(systemName: "pencil")
                             .font(.title2.bold())
                             .foregroundColor(.accentColor)
+                            .onTapGesture {
+                                selectedFood = $food
+                            }
                     }
                 }
             }
@@ -48,7 +53,16 @@ struct FoodListView: View {
         }
         .background(.groupBg)
         .safeAreaInset(edge: .bottom, content: buildFloatButton)
-        .sheet(isPresented: $shouldShowFoodForm) { FoodForm(food: Food(name: "", image: "")) }
+        .sheet(item: $selectedFood, content: { food in
+            FoodForm(food: food.wrappedValue) {
+                food.wrappedValue = $0
+            }
+        })
+        .sheet(isPresented: $shouldShowFoodForm) {
+            FoodForm(food: Food(name: "", image: "")) {
+                food in self.food.append(food)
+            }
+        }
         .sheet(isPresented: $shouldShowSheet) {
             let food = food[4]
             let shouldUseVStack = textSize.isAccessibilitySize || food.image.count > 1
@@ -119,7 +133,7 @@ private extension FoodListView {
     var removeButton: some View {
         Button {
             withAnimation {
-                food = food.filter{ !selectedFood.contains($0.id) }
+                food = food.filter{ !selectedFoodId.contains($0.id) }
             }
         } label: {
 //            Image(systemName: "minus.circle.fill")
