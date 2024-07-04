@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  FoodPickerScreen.swift
 //  FoodPicker
 //
 //  Created by 李露 on 2024/6/16.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct FoodPickerScreen: View {
     
     @State private var selectedFood: Food?
     @State private var shouldShowInfo: Bool = false
@@ -30,8 +30,9 @@ struct ContentView: View {
                 resetButton
             }
             .padding()
+            .maxWidth()
             // 占用最大高度为无限大
-            .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 100)
+            .frame(minHeight: UIScreen.main.bounds.height - 100)
             .font(.title)
             .mainButtonStyle()
             .animation(.fpSpring, value: shouldShowInfo)
@@ -42,7 +43,7 @@ struct ContentView: View {
 }
 
 // MARK: - Subviews
-private extension ContentView {
+private extension FoodPickerScreen {
     var foodImage: some View {
         Group {
             if let selectedFood {
@@ -73,7 +74,7 @@ private extension ContentView {
             Button {
                 shouldShowInfo.toggle()
             } label: {
-                Image(systemName: "info.circle.fill").foregroundColor(.secondary)
+                SFSymbol.info.foregroundColor(.secondary)
             }.buttonStyle(.plain)
         }
     }
@@ -81,37 +82,6 @@ private extension ContentView {
     var foodDetailView: some View {
         VStack {
             if shouldShowInfo {
-                // HStack排版
-                /*
-                HStack {
-                    VStack (spacing: 12) {
-                        Text("蛋白质")
-                        Text(selectedFood!.protein.formatted() + "g")
-                    }
-                    
-                    Divider().frame(width: 1).padding(.horizontal)
-                    
-                    VStack (spacing: 12) {
-                        Text("脂肪")
-                        Text(selectedFood!.fat.formatted() + "g")
-                    }
-                    
-                    Divider().frame(width: 1).padding(.horizontal)
-                    
-                    VStack (spacing: 12) {
-                        Text("碳水")
-                        Text(selectedFood!.carb.formatted() + "g")
-                    }
-                }
-                .font(.title3)
-                .padding(.horizontal)
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .foregroundColor(Color(.systemBackground))
-                )
-                */
-                
                 // Grid排版
                 Grid (horizontalSpacing: 16, verticalSpacing: 12) {
                     GridRow {
@@ -139,7 +109,7 @@ private extension ContentView {
                 .transition(.moveUpWithOpacity)
             }
         }
-        .frame(maxWidth: .infinity)
+        .maxWidth()
         .clipped()
     }
     
@@ -174,7 +144,7 @@ private extension ContentView {
     }
 }
 
-extension ContentView {
+extension FoodPickerScreen {
     init(selectedFood: Food) {
         _selectedFood = State(wrappedValue: selectedFood)
     }
@@ -182,7 +152,7 @@ extension ContentView {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(selectedFood: .examples.first!)
+        FoodPickerScreen(selectedFood: .examples.first!)
         //        ContentView(selectedFood: .examples.first!)
         //        ContentView(selectedFood: .examples.first!).previewDevice(.iPhoneSE)
     }
