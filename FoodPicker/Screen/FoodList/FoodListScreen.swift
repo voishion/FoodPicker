@@ -86,6 +86,7 @@ private extension FoodListScreen {
         let food = foodBinding.wrappedValue
         return HStack {
             Text(food.name)
+                .font(.title3)
                 .padding(.vertical, 8)
                 .push(to: .leading)
                 .contentShape(Rectangle()) // 填充形状，让其可以点击

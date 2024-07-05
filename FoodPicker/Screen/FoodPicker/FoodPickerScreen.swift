@@ -33,7 +33,7 @@ struct FoodPickerScreen: View {
             .maxWidth()
             // 占用最大高度为无限大
             .frame(minHeight: UIScreen.main.bounds.height - 100)
-            .font(.title)
+            .font(.title2.bold())
             .mainButtonStyle()
             .animation(.fpSpring, value: shouldShowInfo)
             // 选择食物发生变化时，产生动画
