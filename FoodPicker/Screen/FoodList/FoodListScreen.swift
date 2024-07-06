@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct FoodListScreen: View {
-    @Environment(\.editMode) var editMode
-    @State private var food = Food.examples
+    @State private var editMode: EditMode = .inactive
+    @AppStorage(.foodList) private var food = Food.examples
     @State private var selectedFoodId = Set<Food.ID>()
     @State private var sheet: Sheet?
     
-    private var isEditing: Bool { editMode?.wrappedValue == .active }
+    private var isEditing: Bool { editMode.isEditing }
     
     var body: some View {
         VStack (alignment: .leading) {
@@ -21,10 +21,16 @@ struct FoodListScreen: View {
             
             List($food, editActions: .all, selection: $selectedFoodId, rowContent: buildFoodRaw)
                 .listStyle(.plain)
+                .background {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(.groupBg2)
+                        .ignoresSafeArea(.container, edges: .bottom)
+                }
                 .padding(.horizontal)
         }
         .background(.groupBg)
         .safeAreaInset(edge: .bottom, content: buildFloatButton)
+        .environment(\.editMode, $editMode)
         .sheet(item: $sheet)
     }
 }
@@ -41,6 +47,8 @@ private extension FoodListScreen {
             EditButton()
                 .buttonStyle(.bordered)
                 .environment(\.locale, .init(identifier: "zh-CN"))
+            
+            addButton
         }.padding()
     }
     
@@ -49,8 +57,7 @@ private extension FoodListScreen {
             sheet = .newFood { food.append($0) }
         } label: {
             SFSymbol.plus
-                .font(.system(size: 50))
-                .padding()
+                .font(.system(size: 40))
                 .symbolRenderingMode(.palette)
                 .foregroundStyle(.white, Color.accentColor.gradient)
         }
@@ -69,17 +76,11 @@ private extension FoodListScreen {
     }
     
     func buildFloatButton() -> some View {
-        ZStack {
-            removeButton
-                .transition(.move(edge: .leading).combined(with: .opacity).animation(.easeInOut))
-                .opacity(isEditing ? 1 : 0)
-                .id(isEditing)
-            addButton
-                .scaleEffect(isEditing ? 0.00001 : 1)
-                .opacity(isEditing ? 0 : 1)
-                .animation(.easeInOut, value: isEditing)
-                .push(to: .trailing)
-        }
+        removeButton
+            .transition(.move(edge: .leading).combined(with: .opacity).animation(.easeInOut))
+            .opacity(isEditing ? 1 : 0)
+            .id(isEditing)
+            .padding(.bottom)
     }
     
     func buildFoodRaw(foodBinding: Binding<Food>) -> some View {
@@ -105,7 +106,7 @@ private extension FoodListScreen {
                         sheet = .editFood(foodBinding)
                     }
             }
-        }
+        }.listRowBackground(Color.clear)
     }
 }
 

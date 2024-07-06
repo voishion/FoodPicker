@@ -19,3 +19,5 @@
         wrappedValue.formatted() + " \(suffix)"
     }
 }
+
+extension Suffix: Codable { }

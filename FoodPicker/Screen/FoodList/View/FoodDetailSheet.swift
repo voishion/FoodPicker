@@ -39,6 +39,8 @@ extension FoodListScreen {
             }
             .padding()
             .padding(.vertical)
+            .maxWidth()
+            .background(.groupBg2)
             .readGeometry(\.size.height, key: FoodDetailSheetHeightKey.self)
             .onPreferenceChange(FoodDetailSheetHeightKey.self) {
                 foodDetaiHeight = $0

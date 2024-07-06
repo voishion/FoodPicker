@@ -15,30 +15,32 @@ struct FoodPickerScreen: View {
     let food = Food.examples
     
     var body: some View {
-        ScrollView (showsIndicators: false) {
-            VStack (spacing: 30) {
-                foodImage
-                
-                Text("今天吃什么？").bold()
-                
-                selectedFoodInfoView
-                
-                Spacer().layoutPriority(1)
-                
-                selectFoodButton
-                
-                resetButton
-            }
-            .padding()
-            .maxWidth()
-            // 占用最大高度为无限大
-            .frame(minHeight: UIScreen.main.bounds.height - 100)
-            .font(.title2.bold())
-            .mainButtonStyle()
-            .animation(.fpSpring, value: shouldShowInfo)
-            // 选择食物发生变化时，产生动画
-            .animation(.fpSpring, value: selectedFood)
-        }.background(.bg2)
+        GeometryReader { proxy in
+            ScrollView (showsIndicators: false) {
+                VStack (spacing: 30) {
+                    foodImage
+                    
+                    Text("今天吃什么？").bold()
+                    
+                    selectedFoodInfoView
+                    
+                    Spacer().layoutPriority(1)
+                    
+                    selectFoodButton
+                    
+                    resetButton
+                }
+                .padding()
+                .maxWidth()
+                // 占用最大高度为无限大
+                .frame(minHeight: proxy.size.height)
+                .font(.title2.bold())
+                .mainButtonStyle()
+                .animation(.fpSpring, value: shouldShowInfo)
+                // 选择食物发生变化时，产生动画
+                .animation(.fpSpring, value: selectedFood)
+            }.background(.bg2)
+        }
     }
 }
 
