@@ -10,8 +10,9 @@ import SwiftUI
 extension UserDefaults {
     enum Key: String {
         case shouldUseDarkMode
-        case unit
         case startTab
         case foodList
+        case preferredEnergyUnit
+        case preferredWieghtUnit
     }
 }

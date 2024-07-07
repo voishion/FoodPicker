@@ -6,17 +6,22 @@
 //
 
 /// 后缀包装器
-@propertyWrapper struct Suffix: Equatable {
+@propertyWrapper struct Suffix<Unit: MyUnitProtocol & Equatable>: Equatable {
     var wrappedValue: Double
-    private let suffix: String
+    var unit: Unit
     
-    init(wrappedValue: Double, _ suffix: String) {
+    init(wrappedValue: Double, _ unit: Unit) {
         self.wrappedValue = wrappedValue
-        self.suffix = suffix
+        self.unit = unit
     }
     
-    var projectedValue: String {
-        wrappedValue.formatted() + " \(suffix)"
+    var projectedValue: Self {
+        get { self }
+        set { self = newValue }
+    }
+    
+    var description: String {
+        wrappedValue.formatted(.number.precision(.fractionLength(0...1))) + " " + unit.rawValue
     }
 }
 

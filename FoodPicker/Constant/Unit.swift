@@ -7,12 +7,24 @@
 
 import SwiftUI
 
-enum Unit: String, CaseIterable, Identifiable, View {
+protocol MyUnitProtocol: Codable, Identifiable, CaseIterable, View, RawRepresentable where RawValue == String, AllCases: RandomAccessCollection {
+    
+}
+
+enum MyEnergyUnit: String, MyUnitProtocol {
+    case cal = "大卡"
+}
+
+enum MyWeightUnit: String, MyUnitProtocol {
     case gram = "g", pound = "lb"
-    
-    var id: Self { self }
-    
+}
+
+extension MyUnitProtocol {
     var body: some View {
         Text(rawValue)
     }
+}
+
+extension MyUnitProtocol {
+    var id: Self { self }
 }

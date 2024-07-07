@@ -5,22 +5,46 @@
 //  Created by 李露 on 2024/6/16.
 //
 
-import Foundation
+import SwiftUI
+
+typealias Energy = Suffix<MyEnergyUnit>
+typealias Weight = Suffix<MyWeightUnit>
 
 struct Food: Equatable, Identifiable {
-    
     var id = UUID()
-    
     var name: String
     var image: String
-    @Suffix("大卡") var calorie: Double  = .zero
-    @Suffix("g") var carb: Double       = .zero
-    @Suffix("g") var fat: Double        = .zero
-    @Suffix("g") var protein: Double    = .zero
+    @Energy var calorie: Double
+    @Weight var carb: Double
+    @Weight var fat: Double
+    @Weight var protein: Double
 }
 
 // MARK: static
 extension Food {
+    static var new: Food {
+        @AppStorage(.preferredEnergyUnit) var preferredEnergyUnit: MyEnergyUnit = .cal
+        @AppStorage(.preferredWieghtUnit) var preferredWieghtUnit: MyWeightUnit = .gram
+        
+        return Food(name: "", image: "",
+             calorie: .init(wrappedValue: .zero, preferredEnergyUnit),
+             carb: .init(wrappedValue: .zero, preferredWieghtUnit),
+             fat: .init(wrappedValue: .zero, preferredWieghtUnit),
+             protein: .init(wrappedValue: .zero, preferredWieghtUnit)
+        )
+    }
+    
+    private init(id: UUID = UUID(), name: String, image: String, calorie: Double, carb: Double, fat: Double, protein: Double) {
+        self.id = id
+        self.name = name
+        self.image = image
+        self._calorie = .init(wrappedValue: calorie, .cal)
+        self._carb    = .init(wrappedValue: carb, .gram)
+        self._fat     = .init(wrappedValue: fat, .gram)
+        self._protein = .init(wrappedValue: protein, .gram)
+    }
+    
+    
     static let examples = [
         Food(name: "汉堡", image: "🍔", calorie: 294, carb: 14, fat: 24, protein: 17),
         Food(name: "沙拉", image: "🥗", calorie: 89, carb: 20, fat: 0, protein: 1.8),
@@ -32,10 +56,7 @@ extension Food {
         Food(name: "牛肉面", image: "🐄🍜", calorie: 219, carb: 33, fat: 5, protein: 9),
         Food(name: "关东煮", image: "🥘", calorie: 80, carb: 4, fat: 4, protein: 6),
     ]
-    
-    static var new: Food {
-        Food(name: "", image: "")
-    }
+
 }
 
 extension Food: Codable { }

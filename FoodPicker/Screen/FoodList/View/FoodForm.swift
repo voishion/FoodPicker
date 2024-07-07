@@ -77,13 +77,13 @@ private extension FoodListScreen.FoodForm {
                     .focused($field, equals: .image)
             }
             
-            buildNumberField(title: "热量", value: $food.calorie, field: .calorie, suffix: "大卡")
+            buildNumberField(title: "热量", value: $food.$calorie, field: .calorie)
 
-            buildNumberField(title: "蛋白质", value: $food.protein, field: .protein)
+            buildNumberField(title: "蛋白质", value: $food.$protein, field: .protein)
 
-            buildNumberField(title: "脂肪", value: $food.fat, field: .fat)
+            buildNumberField(title: "脂肪", value: $food.$fat, field: .fat)
 
-            buildNumberField(title: "碳水", value: $food.carb, field: .carb)
+            buildNumberField(title: "碳水", value: $food.$carb, field: .carb)
         }.padding(.top, -16)
     }
     
@@ -99,13 +99,25 @@ private extension FoodListScreen.FoodForm {
         .disabled(isNotValid)
     }
     
-    func buildNumberField(title: String, value: Binding<Double>, field: MyField, suffix: String = "g") -> some View {
+    func buildNumberField<Unit: MyUnitProtocol & Hashable>(title: String, value: Binding<Suffix<Unit>>, field: MyField) -> some View {
         LabeledContent(title) {
             HStack {
-                TextField("", value: value, format: .number.precision(.fractionLength(1)))
-                    .focused($field, equals: field)
-                    .keyboardType(.decimalPad)
-                Text(suffix)
+                TextField("", value: Binding(
+                    get: { value.wrappedValue.wrappedValue },
+                    set: { value.wrappedValue.wrappedValue = $0 }
+                ), format: .number.precision(.fractionLength(1)))
+                .focused($field, equals: field)
+                .keyboardType(.decimalPad)
+                
+                if Unit.allCases.count <= 1 {
+                    value.unit.wrappedValue
+                } else {
+                    Picker("单位", selection: value.unit) {
+                        ForEach(Unit.allCases, id: \.self) { unit in
+                            unit.body
+                        }
+                    }
+                }
             }
         }
     }

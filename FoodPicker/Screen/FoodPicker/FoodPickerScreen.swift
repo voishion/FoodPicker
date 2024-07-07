@@ -99,9 +99,9 @@ private extension FoodPickerScreen {
                     
                     GridRow {
                         // $属性名=>获取有后缀版本的字符串
-                        Text(selectedFood!.$protein)
-                        Text(selectedFood!.$fat)
-                        Text(selectedFood!.$carb)
+                        Text(selectedFood!.$protein.description)
+                        Text(selectedFood!.$fat.description)
+                        Text(selectedFood!.$carb.description)
                     }
                 }
                 .font(.title3)
@@ -119,7 +119,7 @@ private extension FoodPickerScreen {
         if let selectedFood {
             foodNameView
             
-            Text("热量 \(selectedFood.$calorie)")
+            Text("热量 \(selectedFood.$calorie.description)")
                 .font(.title2)
             
             foodDetailView
